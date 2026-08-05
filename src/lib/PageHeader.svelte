@@ -12,7 +12,7 @@
 </script>
 
 <header
-  class="bg-gray-400 w-full md:h-16 h-12 absolute top-0 flex items-center shrink-0"
+  class="bg-gray-400 w-full md:h-16 h-12 sticky top-0 flex items-center shrink-0"
 >
   <!-- Logo + 标题：桌面端左对齐，移动端居中 -->
   <a

@@ -7,4 +7,4 @@
   <meta name="description" content="Open CCW-一款第三方ccw启动器" />
 </svelte:head>
 <Header></Header>
-<h1>Welcome to OpenCCW</h1>
+<h2 class="text-xl">Welcome to OpenCCW</h2>
