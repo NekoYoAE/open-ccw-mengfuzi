@@ -12,15 +12,15 @@
 </script>
 
 <header
-  class="bg-gray-400 w-full h-16 absolute top-0 flex items-center shrink-0"
+  class="bg-gray-400 w-full md:h-16 h-12 absolute top-0 flex items-center shrink-0"
 >
   <!-- Logo + 标题：桌面端左对齐，移动端居中 -->
   <a
     href="/"
-    class="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center md:contents"
+    class="absolute left-1/2 -translate-x-1/2 flex items-center md:contents"
     title="homepage"
   >
-    <div class="size-12 mt-2 mb-2 md:ml-2 shrink-0"><Logo /></div>
+    <div class="md:size-12 size-8 mt-2 mb-2 md:ml-2 shrink-0"><Logo /></div>
     <h1
       class="ml-2 overflow-hidden h-14 text-2xl md:text-4xl text-white font-bold content-center whitespace-nowrap"
     >
@@ -84,17 +84,13 @@
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
-    class="md:hidden fixed inset-0 top-16 z-40 bg-black/30"
+    class="md:hidden fixed inset-0 top-12 z-40 bg-black/30"
     onclick={() => (menuOpen = false)}
   >
     <div
-      class="absolute top-0 right-0 w-48 bg-white rounded-bl-2xl shadow-xl py-2"
+      class="absolute top-0 right-0 w-48 bg-gray-200 rounded-bl-2xl shadow-xl py-2"
       onclick={(e: MouseEvent) => e.stopPropagation()}
     >
-      <div class="flex flex-col gap-1 px-2">
-        <LoginButton></LoginButton>
-      </div>
-
       {#if $user.loggedIn}
         <button
           class="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
@@ -125,6 +121,10 @@
               >{$user.name || "未命名"}</span
             >
           </div>
+        </div>
+      {:else}
+        <div class="flex flex-col gap-1 px-2">
+          <LoginButton></LoginButton>
         </div>
       {/if}
     </div>
