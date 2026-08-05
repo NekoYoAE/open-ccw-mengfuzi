@@ -26,7 +26,10 @@
   });
 </script>
 
-<svelte:head><title>OpenCCW - OAuth 授权回调</title></svelte:head>
+<svelte:head>
+  <title>OpenCCW - OAuth 授权回调</title>
+  <meta name="description" content="Open CCW oauth回调" />
+</svelte:head>
 
 <div
   class="w-screen h-screen min-h-fit flex items-center justify-center"
