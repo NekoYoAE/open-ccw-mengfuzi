@@ -14,8 +14,12 @@
 </script>
 
 <svelte:head>
-  <title>OpenCCW - Welcome To OpenCCW</title>
-  <meta name="description" content="Open CCW注册页" />
+  <title>注册账号 — Open CCW</title>
+  <meta
+    name="description"
+    content="加入 Open CCW，注册并绑定你的 CCW 社区账号。支持手动输入 Token 或通过 OAuth 一键授权自动获取，使用 PIN 码本地加密保护你的数据安全。"
+  />
   <link rel="preload" as="image" href={bg} />
+  <link rel="canonical" href="https://ccw.kivotos.qzz.io/register" />
 </svelte:head>
 <Register {token}></Register>

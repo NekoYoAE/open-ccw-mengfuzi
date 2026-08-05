@@ -22,8 +22,8 @@
 </script>
 
 <svelte:head>
-  <title>OpenCCW - 正在跳转</title>
-  <meta name="description" content="Open CCW oauth 跳转页" />
+  <title>正在跳转 CCW 登录 — Open CCW</title>
+  <meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
 <div
