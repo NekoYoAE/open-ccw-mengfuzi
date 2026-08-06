@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
 
   onMount(() => {
-    location.href = "/notice/like";
+    history.replaceState({}, "", "/notice/interaction");
   });
 </script>
 

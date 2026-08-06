@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import DeviceTableRow from "./DeviceTableRow.svelte";
   import type { Session } from "./types";
+  import Error from "$lib/utils/Error.svelte";
 
   let sessions = $state<Session[]>([]);
   let loading = $state(true);
@@ -50,8 +51,7 @@
 <h1 class="text-lg font-bold text-gray-800 text-center w-full">登录设备管理</h1>
 
 {#if error}
-  <h2 class="text-lg text-red-500">{error}</h2>
-  <a href="/" class="underline text-blue-500">返回首页</a>
+  <Error {error}></Error>
 {:else}
   <div class="flex items-center justify-between mb-4 px-1">
     <div>
@@ -95,9 +95,9 @@
           <tr
             class="bg-gray-200 text-gray-700 text-xs font-semibold uppercase tracking-wider"
           >
-            <th class="px-4 py-3 text-center w-20">ID</th>
-            <th class="px-4 py-3 text-left w-min-44">设备</th>
-            <th class="px-4 py-3 text-left w-min-28">浏览器</th>
+            <th class="px-4 py-3 text-center w-fit">ID</th>
+            <th class="px-4 py-3 text-left w-min-44 w-fit">设备</th>
+            <th class="px-4 py-3 text-left w-min-28 w-fit">浏览器</th>
             <th class="px-4 py-3 text-left w-44">登录时间</th>
             <th class="px-4 py-3 text-center w-28">登录方式</th>
             <th class="px-4 py-3 text-left w-min-44">属地</th>

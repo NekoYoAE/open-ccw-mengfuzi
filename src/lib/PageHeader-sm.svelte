@@ -11,9 +11,9 @@
   import { goto } from "$app/navigation";
   import { communityWeb } from "$lib/api";
 
-  let showCheckIn = $state(false);
+  let { showCheckIn = $bindable(false), checkedIn = $bindable(true) } =
+    $props();
   let menuOpen = $state(false);
-  let checkedIn = $state(false);
 
   async function handleLogout() {
     await logout();
@@ -40,23 +40,19 @@
 </script>
 
 <header
-  class="bg-gray-400 w-full h-12 sticky top-0 flex items-center shrink-0 z-50"
+  class="bg-gray-400 w-full h-12 sticky top-0 flex items-center justify-center shrink-0 z-50"
 >
-  <a
-    href="/"
-    class="ml-2 absolute flex justify-center items-center w-full"
-    title="homepage"
-  >
+  <a href="/" class="flex justify-center items-center w-fit" title="homepage">
     <div class="size-8 mt-2 mb-2 shrink-0"><Logo /></div>
     <h1
-      class="ml-2 overflow-hidden h-14 text-2xl text-white font-bold content-center whitespace-nowrap"
+      class="leading-12 ml-2 overflow-hidden h-12 text-2xl text-white font-bold content-center whitespace-nowrap"
     >
       Open CCW
     </h1>
   </a>
 
   <button
-    class="relative ml-auto mr-4 size-10 flex flex-col items-center justify-center gap-1.5 rounded-lg hover:bg-white/20 transition-colors cursor-pointer z-50"
+    class="absolute right-4 size-10 flex flex-col items-center justify-center gap-1.5 rounded-lg hover:bg-white/20 transition-colors cursor-pointer z-50"
     title="菜单"
     onclick={() => (menuOpen = !menuOpen)}
     aria-label="菜单"

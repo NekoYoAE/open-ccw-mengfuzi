@@ -8,6 +8,7 @@
     type Account,
   } from "./tokenStore";
   import CancelButton from "$lib/CancelButton.svelte";
+  import Error from "$lib/utils/Error.svelte";
 
   let dialog = $state<HTMLDialogElement>();
   let accounts = $state<Account[]>([]);
@@ -156,9 +157,7 @@
             />
           </div>
 
-          {#if error}
-            <p class="text-red-500 text-sm">{error}</p>
-          {/if}
+          <Error {error}></Error>
 
           <button
             type="submit"

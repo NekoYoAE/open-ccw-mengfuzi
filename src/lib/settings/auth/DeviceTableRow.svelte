@@ -14,12 +14,13 @@
   const loginTime = $derived(new Date(session.createdAt));
   const loginType = $derived(parseLoginType(session.extra));
 
-  let detailedLocation = $state(false);
+  let detailedLocation: LocateRes["data"] | null = $state(null);
   let loadingDetailedLocation = $state(false);
   let locationArea = $state("");
   let isp = $state("");
   let copied = $state(false);
   let logoutProcessing = $state(false);
+  let loadLocationError = $state("");
   let loggedOut = $state(false);
 
   function parseLoginType(extra: string): string {
@@ -39,16 +40,16 @@
 
   async function fetchDetailedLocation() {
     loadingDetailedLocation = true;
-    const res: LocateRes = await fetch("/settings/auth/locate", {
-      method: "POST",
-      body: JSON.stringify({ ip: session.ip }),
-    }).then((res) => res.json());
-    isp = res.data.isp;
-    session.area.country = res.data.country;
-    session.area.city = res.data.city;
-    session.area.province = res.data.prov;
-    locationArea = res.data.area || "未知";
-    detailedLocation = true;
+    try {
+      const res: LocateRes = await fetch("/settings/auth/locate", {
+        method: "POST",
+        body: JSON.stringify({ ip: session.ip }),
+      }).then((res) => res.json());
+      detailedLocation = res.data;
+      detailedLocation.area ||= "未知地区";
+    } catch (e) {
+      loadLocationError = String(e);
+    }
     loadingDetailedLocation = false;
   }
 
@@ -62,7 +63,7 @@
   }
 </script>
 
-<tr class="hover:bg-gray-50 transition-colors">
+<tr class="hover:bg-gray-100 transition-colors border-b border-gray-300">
   <td
     class="px-4 py-3 text-center text-gray-500 font-mono text-xs"
     title={session.ip}
@@ -75,10 +76,10 @@
         class="mr-1.5 inline-block w-1.5 h-1.5 rounded-full bg-green-400 align-middle"
       ></span>
     {/if}
-    {session.device || "—"}
+    {session.device || "未知设备"}
   </td>
   <td class="px-4 py-3 whitespace-nowrap" title={session.browser}>
-    {session.browser || "—"}
+    {session.browser || "未知浏览器"}
   </td>
   <td class="px-4 py-3 text-gray-600 whitespace-nowrap">
     {loginTime.toLocaleString()}
@@ -97,9 +98,8 @@
         title="点击复制 IP：{session.ip}"
         onclick={copyIP}
       >
-        {isp}
-        {session.area.country}-{session.area.province}-{session.area
-          .city}-{locationArea}
+        {detailedLocation.isp}
+        {detailedLocation.country}-{detailedLocation.prov}-{detailedLocation.city}-{detailedLocation.area}
       </button>
     {:else}
       <button
@@ -132,6 +132,11 @@
         {#if loadingDetailedLocation}
           <span class="text-gray-400 text-xs whitespace-nowrap">查询中...</span>
         {:else}
+          {#if loadLocationError}
+            <span class="text-red-500 text-xs whitespace-nowrap"
+              >{loadLocationError}</span
+            >
+          {/if}
           <button
             onclick={fetchDetailedLocation}
             class="rounded-md bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600 hover:bg-blue-100 transition-colors cursor-pointer whitespace-nowrap"

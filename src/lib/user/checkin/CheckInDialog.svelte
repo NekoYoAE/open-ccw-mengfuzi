@@ -4,6 +4,7 @@
   import { onMount } from "svelte";
   import Coin from "./CoinImage.svelte";
   import CancelButton from "$lib/CancelButton.svelte";
+  import Error from "$lib/utils/Error.svelte";
 
   let { onclose, onChecked }: { onclose: () => void; onChecked: () => void } =
     $props();
@@ -60,9 +61,7 @@
     </div>
 
     <div class="p-6 text-center space-y-4">
-      {#if error}
-        <div class="text-red-500 text-sm">{error}</div>
-      {/if}
+      <Error {error}></Error>
 
       {#if checkedIn}
         <div class="w-16 h-16 mx-auto"><Coin {bucks}></Coin></div>

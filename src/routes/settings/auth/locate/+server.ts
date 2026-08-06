@@ -28,5 +28,8 @@ export const POST: RequestHandler = async ({ request }) => {
   if (!ip) {
     return error(500, "ip is required");
   }
-  return await fetch(`https://ip9.com.cn/get?ip=${ip}`);
+  const controller = new AbortController();
+  const signal = controller.signal;
+  setTimeout(() => controller.abort("timeout"), 3000);
+  return await fetch(`https://ip9.com.cn/get?ip=${ip}`, { signal });
 };

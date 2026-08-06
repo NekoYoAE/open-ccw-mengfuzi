@@ -11,8 +11,8 @@
   import { goto } from "$app/navigation";
   import { communityWeb } from "$lib/api";
 
-  let showCheckIn = $state(false);
-  let checkedIn = $state(false);
+  let { showCheckIn = $bindable(false), checkedIn = $bindable(true) } =
+    $props();
 
   async function handleLogout() {
     await logout();
@@ -90,12 +90,12 @@
       </div>
 
       <button
-        class="size-12 rounded-full flex items-center justify-center cursor-pointer hover:bg-white/20 transition-colors"
+        class="size-12 rounded-full flex items-center text-red-500 justify-center cursor-pointer hover:bg-white/20 transition-colors"
         title="退出登录"
         onclick={handleLogout}
       >
         <svg
-          class="size-6 text-white"
+          class="size-6"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"

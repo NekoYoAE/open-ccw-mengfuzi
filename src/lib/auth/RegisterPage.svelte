@@ -3,6 +3,7 @@
 
   import ccwLogo from "$lib/assets/ccw-logo.png";
   import bg from "$lib/assets/registerBG.png";
+  import Error from "$lib/utils/Error.svelte";
 
   let { token = "" } = $props();
 
@@ -112,9 +113,7 @@
             />
           </div>
 
-          {#if error}
-            <p class="text-red-500 text-sm">{error}</p>
-          {/if}
+          <Error {error}></Error>
 
           <button
             type="submit"
