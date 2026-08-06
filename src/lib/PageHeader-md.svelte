@@ -7,8 +7,34 @@
   import noticeSvg from "$lib/assets/notice.svg";
   import cogSvg from "$lib/assets/cog.svg";
   import { user } from "./user/userStore";
+  import { logout } from "./auth/tokenStore";
+  import { goto } from "$app/navigation";
+  import { communityWeb } from "$lib/api";
 
   let showCheckIn = $state(false);
+  let checkedIn = $state(false);
+
+  async function handleLogout() {
+    await logout();
+    await goto("/");
+  }
+
+  async function updateCheckIn() {
+    try {
+      const { checkInRecordResps, todayIndex } =
+        await communityWeb.getCheckInRecords();
+      const today = checkInRecordResps[todayIndex];
+      checkedIn = today.isCheckIn;
+    } catch (e) {
+      return;
+    }
+  }
+
+  $effect(() => {
+    if ($user.loggedIn) {
+      updateCheckIn();
+    }
+  });
 </script>
 
 <header
@@ -32,11 +58,15 @@
     <LoginButton></LoginButton>
     {#if $user.loggedIn}
       <button
-        class="size-12 rounded-full flex items-center justify-center cursor-pointer"
+        class="size-12 rounded-full flex items-center justify-center cursor-pointer relative"
         title="签到"
         onclick={() => (showCheckIn = true)}
       >
         <img src={coinSvg} alt="签到" class="size-10" />
+        {#if !checkedIn}
+          <span class="bg-red-500 rounded-full size-3 absolute top-2 right-2"
+          ></span>
+        {/if}
       </button>
 
       <a
@@ -58,6 +88,26 @@
       <div class="size-12" title="avatar">
         <Avatar url={$user.avatar} />
       </div>
+
+      <button
+        class="size-12 rounded-full flex items-center justify-center cursor-pointer hover:bg-white/20 transition-colors"
+        title="退出登录"
+        onclick={handleLogout}
+      >
+        <svg
+          class="size-6 text-white"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+      </button>
     {/if}
   </div>
 </header>
@@ -66,6 +116,9 @@
   <CheckInDialog
     onclose={() => {
       showCheckIn = false;
+    }}
+    onChecked={() => {
+      checkedIn = true;
     }}
   />
 {/if}

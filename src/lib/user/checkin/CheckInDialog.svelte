@@ -5,7 +5,8 @@
   import Coin from "./CoinImage.svelte";
   import CancelButton from "$lib/CancelButton.svelte";
 
-  let { onclose }: { onclose: () => void } = $props();
+  let { onclose, onChecked }: { onclose: () => void; onChecked: () => void } =
+    $props();
 
   let checking = $state(false);
   let checkedIn = $state(false);
@@ -33,10 +34,10 @@
     checking = true;
     error = "";
     try {
-      // TODO: 接入真实签到 API
       await communityWeb.insertCheckInRecord();
       coinCount += bucks;
       checkedIn = true;
+      onChecked();
     } catch (e) {
       error = String(e);
     } finally {

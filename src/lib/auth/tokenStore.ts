@@ -33,13 +33,18 @@ token.subscribe((token) => {
 export async function updateTokenAndUser(newToken: string) {
   setToken(newToken);
   token.set(newToken);
-  const { oid, name, avatar } = await communityWeb.getStudentSelfDetail(
-    true,
-    true,
-    [],
-  );
-  if (oid) {
-    user.set({ oid, name, avatar, loggedIn: true });
+  try {
+    const { oid, name, avatar } = await communityWeb.getStudentSelfDetail(
+      true,
+      true,
+      [],
+    );
+    if (oid) {
+      user.set({ oid, name, avatar, loggedIn: true });
+    }
+  } catch (e) {
+    user.set({ loggedIn: false });
+    throw e;
   }
 }
 
@@ -139,4 +144,17 @@ export function getActiveAccount(): string | null {
 export function clearToken(): void {
   localStorage.removeItem(ACTIVE_KEY);
   token.set("");
+}
+
+/**
+ * 退出当前账号（不清除本地保存的账号数据）
+ */
+export async function logout() {
+  clearToken();
+  sessionStorage.removeItem(TOKEN_PREFIX);
+  try {
+    await updateTokenAndUser("");
+  } catch (e) {
+    return;
+  }
 }

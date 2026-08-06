@@ -7,9 +7,36 @@
   import noticeSvg from "$lib/assets/notice.svg";
   import cogSvg from "$lib/assets/cog.svg";
   import { user } from "./user/userStore";
+  import { logout } from "./auth/tokenStore";
+  import { goto } from "$app/navigation";
+  import { communityWeb } from "$lib/api";
 
   let showCheckIn = $state(false);
   let menuOpen = $state(false);
+  let checkedIn = $state(false);
+
+  async function handleLogout() {
+    await logout();
+    menuOpen = false;
+    await goto("/");
+  }
+
+  async function updateCheckIn() {
+    try {
+      const { checkInRecordResps, todayIndex } =
+        await communityWeb.getCheckInRecords();
+      const today = checkInRecordResps[todayIndex];
+      checkedIn = today.isCheckIn;
+    } catch (e) {
+      return;
+    }
+  }
+
+  $effect(() => {
+    if ($user.loggedIn) {
+      updateCheckIn();
+    }
+  });
 </script>
 
 <header
@@ -29,7 +56,7 @@
   </a>
 
   <button
-    class="ml-auto mr-4 size-10 flex flex-col items-center justify-center gap-1.5 rounded-lg hover:bg-white/20 transition-colors cursor-pointer z-50"
+    class="relative ml-auto mr-4 size-10 flex flex-col items-center justify-center gap-1.5 rounded-lg hover:bg-white/20 transition-colors cursor-pointer z-50"
     title="菜单"
     onclick={() => (menuOpen = !menuOpen)}
     aria-label="菜单"
@@ -49,6 +76,10 @@
         ? '-translate-y-2 -rotate-45'
         : ''}"
     ></span>
+    {#if !checkedIn}
+      <span class="bg-red-500 rounded-full size-2 absolute right-0 top-1"
+      ></span>
+    {/if}
   </button>
 </header>
 
@@ -66,13 +97,17 @@
     >
       {#if $user.loggedIn}
         <button
-          class="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
+          class="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer relative"
           onclick={() => {
             showCheckIn = true;
             menuOpen = false;
           }}
         >
           <img src={coinSvg} alt="签到" class="size-6" />
+          {#if !checkedIn}
+            <span class="bg-red-500 rounded-full size-2 absolute left-8 top-3"
+            ></span>
+          {/if}
           <span class="text-sm font-medium">每日签到</span>
         </button>
 
@@ -93,7 +128,28 @@
           <span class="text-sm font-medium">个人设置</span>
         </a>
 
-        <div class="border-t border-gray-100 mt-1 pt-2 px-4 pb-1">
+        <div class="border-t border-gray-100 mt-1 pt-2">
+          <button
+            class="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-gray-50 transition-colors cursor-pointer"
+            onclick={handleLogout}
+          >
+            <svg
+              class="size-6"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            <span class="text-sm font-medium">退出登录</span>
+          </button>
+        </div>
+        <div class="border-t border-gray-100 pt-2 px-4 pb-1">
           <div class="flex items-center gap-3 py-2">
             <div class="size-8 shrink-0">
               <Avatar url={$user.avatar} />
@@ -116,6 +172,9 @@
   <CheckInDialog
     onclose={() => {
       showCheckIn = false;
+    }}
+    onChecked={() => {
+      checkedIn = true;
     }}
   />
 {/if}
