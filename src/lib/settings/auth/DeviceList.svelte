@@ -96,8 +96,8 @@
             class="bg-gray-200 text-gray-700 text-xs font-semibold uppercase tracking-wider"
           >
             <th class="px-4 py-3 text-center w-20">ID</th>
-            <th class="px-4 py-3 text-left w-44">设备</th>
-            <th class="px-4 py-3 text-left w-28">浏览器</th>
+            <th class="px-4 py-3 text-left w-min-44">设备</th>
+            <th class="px-4 py-3 text-left w-min-28">浏览器</th>
             <th class="px-4 py-3 text-left w-44">登录时间</th>
             <th class="px-4 py-3 text-center w-28">登录方式</th>
             <th class="px-4 py-3 text-left w-min-44">属地</th>

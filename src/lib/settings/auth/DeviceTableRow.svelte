@@ -69,7 +69,7 @@
   >
     {session.id}
   </td>
-  <td class="px-4 py-3 max-w-32 truncate" title={session.device}>
+  <td class="px-4 py-3 whitespace-nowrap" title={session.device}>
     {#if session.currentDevice}
       <span
         class="mr-1.5 inline-block w-1.5 h-1.5 rounded-full bg-green-400 align-middle"
@@ -77,7 +77,7 @@
     {/if}
     {session.device || "—"}
   </td>
-  <td class="px-4 py-3 max-w-32 truncate" title={session.browser}>
+  <td class="px-4 py-3 whitespace-nowrap" title={session.browser}>
     {session.browser || "—"}
   </td>
   <td class="px-4 py-3 text-gray-600 whitespace-nowrap">
