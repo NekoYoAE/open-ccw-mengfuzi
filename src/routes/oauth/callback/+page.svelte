@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { sso } from "@ccw-api/api";
+  import { sso } from "$lib/api";
   import { onMount } from "svelte";
   import bg from "$lib/assets/registerBG.png";
 

@@ -1,8 +1,10 @@
-import { setToken } from "@ccw-api/request";
+import { setToken } from "$lib/api";
 import { writable } from "svelte/store";
 import { decryptWithPassword, encryptWithPassword } from "$lib/utils/aes";
 import { user } from "$lib/user/userStore";
-import { communityWeb } from "@ccw-api/api";
+import { communityWeb } from "$lib/api";
+import { browser } from "$app/environment";
+import { getToken } from "@ccw-api/request";
 
 const ACCOUNTS_KEY = "oc_accounts";
 const TOKEN_PREFIX = "oc_token_";
@@ -14,11 +16,22 @@ export interface Account {
 }
 
 export const token = writable<string>("");
+
+if (browser) {
+  const storedToken = sessionStorage.getItem(TOKEN_PREFIX);
+  if (storedToken) {
+    updateTokenAndUser(storedToken);
+  }
+}
+
 token.subscribe((token) => {
-  setToken(token);
+  if (token && browser) {
+    sessionStorage.setItem(TOKEN_PREFIX, token);
+  }
 });
 
 export async function updateTokenAndUser(newToken: string) {
+  setToken(newToken);
   token.set(newToken);
   const { oid, name, avatar } = await communityWeb.getStudentSelfDetail(
     true,

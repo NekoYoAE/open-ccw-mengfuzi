@@ -1,11 +1,8 @@
 <script lang="ts">
   import "./layout.css";
   import favicon from "$lib/assets/favicon.svg";
-  import { setRequestUtils } from "@ccw-api/api";
-  import { requestUtils } from "@ccw-api/request";
   let { children } = $props();
-
-  setRequestUtils(requestUtils);
+  import "$lib/auth/tokenStore";
 </script>
 
 <svelte:head>
