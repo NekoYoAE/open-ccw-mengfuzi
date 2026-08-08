@@ -1,5 +1,5 @@
 {
-  "name": "open-ccw",
+  "name": "@open-ccw/open-ccw",
   "private": true,
   "version": "0.0.1",
   "type": "module",
