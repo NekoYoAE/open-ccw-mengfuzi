@@ -2,7 +2,7 @@
   import Header from "$lib/PageHeader.svelte";
   import logo from "$lib/assets/favicon.svg";
   import coinSvg from "$lib/assets/coin.svg";
-  import interactionSvg from "$lib/assets/interaction.svg";
+  import noticeSvg from "$lib/assets/notice.svg";
   import cogSvg from "$lib/assets/cog.svg";
 
   const features = [
@@ -12,7 +12,7 @@
       desc: "登录后一键签到，领取金币奖励",
     },
     {
-      icon: interactionSvg,
+      icon: noticeSvg,
       title: "消息通知",
       desc: "聚合互动与回复消息，不错过任何动态",
     },
