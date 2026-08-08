@@ -58,7 +58,7 @@
     <LoginButton></LoginButton>
     {#if $user.loggedIn}
       <button
-        class="size-12 rounded-full flex items-center justify-center cursor-pointer relative"
+        class="size-12 rounded-full flex items-center justify-center cursor-pointer relative hover:bg-white/20 transition-colors"
         title="签到"
         onclick={() => (showCheckIn = true)}
       >
@@ -70,15 +70,15 @@
       </button>
 
       <a
-        class="size-12 rounded-full flex items-center justify-center cursor-pointer"
+        class="size-12 rounded-full flex items-center justify-center cursor-pointer hover:bg-white/20 transition-colors"
         title="消息"
-        href="/notice"
+        href="/notice/interaction"
       >
         <img src={noticeSvg} alt="消息" class="size-10" />
       </a>
 
       <a
-        class="size-12 rounded-full flex items-center justify-center cursor-pointer"
+        class="size-12 rounded-full flex items-center justify-center cursor-pointer hover:bg-white/20 transition-colors"
         title="设置"
         href="/settings/auth"
       >

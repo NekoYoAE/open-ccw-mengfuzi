@@ -108,7 +108,7 @@
         </button>
 
         <a
-          href="/notice"
+          href="/notice/interaction"
           class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
           onclick={() => (menuOpen = false)}
         >
