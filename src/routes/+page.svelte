@@ -1,5 +1,27 @@
 <script lang="ts">
   import Header from "$lib/PageHeader.svelte";
+  import logo from "$lib/assets/favicon.svg";
+  import coinSvg from "$lib/assets/coin.svg";
+  import noticeSvg from "$lib/assets/notice.svg";
+  import cogSvg from "$lib/assets/cog.svg";
+
+  const features = [
+    {
+      icon: coinSvg,
+      title: "每日签到",
+      desc: "登录后一键签到，领取金币奖励",
+    },
+    {
+      icon: noticeSvg,
+      title: "消息通知",
+      desc: "聚合互动与回复消息，不错过任何动态",
+    },
+    {
+      icon: cogSvg,
+      title: "设备管理",
+      desc: "查看登录会话，随时退出可疑设备",
+    },
+  ];
 </script>
 
 <svelte:head>
@@ -11,5 +33,42 @@
   <meta name="keywords" content="Open CCW, CCW启动器, CCW第三方客户端, CCW签到, CCW OAuth登录" />
   <link rel="canonical" href="https://ccw.kivotos.qzz.io/" />
 </svelte:head>
+
 <Header></Header>
-<h2 class="text-xl">Welcome to OpenCCW</h2>
+
+<main class="w-full flex flex-col items-center px-4 py-12 gap-10">
+  <section class="flex flex-col items-center text-center gap-4 max-w-2xl">
+    <img src={logo} alt="Open CCW" class="size-20" />
+    <h2 class="text-3xl font-bold text-gray-800 font-serif">Welcome to Open CCW</h2>
+    <p class="text-gray-500 leading-relaxed">
+      一款以安全为主要理念的第三方 CCW 启动器，支持 OAuth 一键授权登录、多账号管理、AES 本地加密存储
+      Token 与每日签到，便捷实用。
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-3 mt-2">
+      <a
+        href="/register"
+        class="rounded-lg bg-green-500 px-6 py-3 text-white font-medium hover:bg-green-600 transition-colors"
+      >
+        开始使用
+      </a>
+      <a
+        href="/oauth"
+        class="rounded-lg border border-gray-300 bg-white px-6 py-3 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+      >
+        通过第三方登录
+      </a>
+    </div>
+  </section>
+
+  <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-3xl">
+    {#each features as { icon, title, desc }}
+      <div
+        class="flex flex-col items-center text-center gap-2 rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
+      >
+        <img src={icon} alt={title} class="size-10" />
+        <h3 class="text-base font-semibold text-gray-800">{title}</h3>
+        <p class="text-sm text-gray-500">{desc}</p>
+      </div>
+    {/each}
+  </section>
+</main>
