@@ -1,11 +1,54 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import type { PageProps } from "./$types";
-  import Error from "$lib/utils/Error.svelte";
   import Profile from "$lib/user/Profile.svelte";
   import PageHeader from "$lib/PageHeader.svelte";
+  import { communityWeb } from "$lib/api";
 
-  let { data, params }: PageProps = $props();
-  let { profile, error } = $derived(data);
+  let { params }: PageProps = $props();
+
+  let profile = $state<UserProfile | null>(null);
+  let error = $state("");
+  let stats = $state<{
+    likeCount: number;
+    favoriteCount: number;
+    followerCount: number;
+    followingCount: number;
+  } | null>(null);
+
+  async function load() {
+    if (!params.id) {
+      error = "config error";
+      return;
+    }
+    try {
+      let studentNumber: string | undefined = undefined,
+        studentOid: string | undefined = undefined;
+      if (params.id.length == 24) {
+        studentOid = params.id;
+      } else {
+        studentNumber = params.id;
+      }
+      const p = await communityWeb.getStudentProfile({
+        studentNumber,
+        studentOid,
+      });
+      profile = p;
+      const detail = await communityWeb.getCreationStudentDetail(p.studentOid);
+      stats = {
+        likeCount: detail.likeCount,
+        favoriteCount: detail.favoriteCount,
+        followerCount: detail.followerCount,
+        followingCount: detail.followingCount,
+      };
+    } catch (e) {
+      error = String(e);
+    }
+  }
+
+  onMount(() => {
+    load();
+  });
 </script>
 
 <svelte:head>
@@ -26,7 +69,4 @@
   <link rel="canonical" href={`https://ccw.kivotos.qzz.io/user/${params.id}`} />
 </svelte:head>
 <PageHeader></PageHeader>
-<Profile bind:profile id={params.id}></Profile>
-{#if !profile}
-  <Error {error}></Error>
-{/if}
+<Profile {profile} {stats} {error}></Profile>

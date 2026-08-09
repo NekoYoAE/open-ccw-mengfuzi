@@ -1,48 +1,38 @@
 <script lang="ts">
   import Error from "$lib/utils/Error.svelte";
-  import { communityWeb } from "$lib/api";
-  import { onMount } from "svelte";
+  import { config } from "$lib/utils/purifyConfig";
   import AvatarImage from "./AvatarImage.svelte";
+  import DOMPurify from "dompurify";
+  import { marked } from "marked";
 
   let {
-    id = "",
     profile = $bindable(null),
-  }: { id: string; profile: UserProfile | null } = $props();
+    stats = null,
+    error = "",
+  }: {
+    profile: UserProfile | null;
+    stats: {
+      likeCount: number;
+      favoriteCount: number;
+      followerCount: number;
+      followingCount: number;
+    } | null;
+    error: string;
+  } = $props();
 
-  let error = $state("");
+  // 统计计数（缺省时为 0）
+  let likeCount = $derived(stats?.likeCount ?? 0),
+    favoriteCount = $derived(stats?.favoriteCount ?? 0),
+    followerCount = $derived(stats?.followerCount ?? 0),
+    followingCount = $derived(stats?.followingCount ?? 0);
 
-  async function loadFull() {
-    if (!id) {
-      error = "config error";
-      return;
-    }
-    try {
-      let studentNumber = undefined,
-        studentOid = undefined;
-      if (id.length == 24) {
-        studentOid = id;
-      } else {
-        studentNumber = id;
-      }
-      profile = await communityWeb.getStudentProfile({
-        studentNumber,
-        studentOid,
-      });
-    } catch (e) {
-      error = String(e);
-    }
-  }
-
-  onMount(() => {
-    if (profile) {
-      // 已有 user，但仍尝试获取完整资料以补全统计信息
-      loadFull().catch((e) => {
-        error = `本地请求失败 ${String(e)}`;
-      });
-      return;
-    }
-    loadFull();
-  });
+  let renderIntroAsHTML = $state(false);
+  let intro = $derived(
+    DOMPurify.sanitize(
+      String(marked.parse(profile?.extraInfo.selfIntroduction || "loading...")),
+      config,
+    ),
+  );
 
   function formatBirthday(ts: number): string {
     if (!ts) return "-";
@@ -62,7 +52,6 @@
 
 {#if profile}
   <div class="max-w-3xl mx-auto">
-    <!-- 顶部卡片：头像 + 昵称 + 简介 + 核心数据 -->
     <div class="bg-white shadow overflow-hidden border border-gray-100">
       {#if profile.memberArchive?.homepageCover}
         <img
@@ -77,13 +66,15 @@
         <div class="flex flex-row gap-4 relative flex-nowrap">
           <div class="size-16 shrink-0">
             {#if profile.avatar}
-              <AvatarImage url={profile.avatar} virtual={profile.virtualValue}
-              ></AvatarImage>
+              <AvatarImage
+                url={profile.avatar}
+                virtual={profile.virtualValue}
+              />
             {:else}
               <AvatarImage
                 url="https://m.xiguacity.cn/icon/new_avatar.png"
                 virtual={profile.virtualValue}
-              ></AvatarImage>
+              />
             {/if}
           </div>
 
@@ -118,7 +109,7 @@
 
         <!-- 核心统计 -->
         <div
-          class="mt-6 grid grid-cols-3 gap-3 border-t border-gray-100 pt-5 text-center"
+          class="mt-6 grid grid-cols-4 gap-3 border-t border-gray-100 pt-5 text-center"
         >
           <div>
             <div class="text-2xl font-bold text-indigo-600">
@@ -133,10 +124,38 @@
             <div class="text-xs text-gray-500 mt-1">作品</div>
           </div>
           <div>
+            <div class="text-2xl font-bold text-gray-800">{likeCount}</div>
+            <div class="text-xs text-gray-500 mt-1">总点赞</div>
+          </div>
+          <div>
             <div class="text-2xl font-bold text-gray-800">
               {profile.statistics.likeHomeworkCount}
             </div>
-            <div class="text-xs text-gray-500 mt-1">获赞</div>
+            <div class="text-xs text-gray-500 mt-1">作品获赞</div>
+          </div>
+        </div>
+
+        <!-- 社交统计 -->
+        <div
+          class="mt-3 grid grid-cols-4 gap-3 border-t border-gray-100 pt-4 text-center"
+        >
+          <div>
+            <div class="text-2xl font-bold text-gray-800">{favoriteCount}</div>
+            <div class="text-xs text-gray-500 mt-1">被收藏</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-gray-800">
+              {profile.commentCount}
+            </div>
+            <div class="text-xs text-gray-500 mt-1">评论</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-gray-800">{followerCount}</div>
+            <div class="text-xs text-gray-500 mt-1">粉丝</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-gray-800">{followingCount}</div>
+            <div class="text-xs text-gray-500 mt-1">关注</div>
           </div>
         </div>
       </div>
@@ -164,10 +183,6 @@
           <div class="text-gray-400">加入天数</div>
           <div class="text-gray-800 mt-1">{profile.studentCreatedDays} 天</div>
         </div>
-        <div>
-          <div class="text-gray-400">评论数</div>
-          <div class="text-gray-800 mt-1">{profile.commentCount}</div>
-        </div>
       </div>
     </div>
 
@@ -177,14 +192,6 @@
     >
       <h2 class="text-lg font-semibold text-gray-900 mb-4">个人介绍</h2>
       <div class="space-y-4 text-sm">
-        {#if profile.extraInfo.selfIntroduction}
-          <div>
-            <div class="text-gray-400">自我介绍</div>
-            <p class="text-gray-800 mt-1 leading-relaxed">
-              {profile.extraInfo.selfIntroduction}
-            </p>
-          </div>
-        {/if}
         {#if profile.extraInfo.learnedProgrammingLanguages}
           <div>
             <div class="text-gray-400">掌握语言</div>
@@ -213,6 +220,32 @@
                 {/if}
               {/each}
             </div>
+          </div>
+        {/if}
+        {#if profile.extraInfo.selfIntroduction}
+          <div>
+            <div class="flex w-full">
+              <span class="text-gray-400">自我介绍</span>
+              <button
+                class="ml-auto mr-0 bg-white text-red-500 rounded-md border border-red-500 p-1 hover:bg-red-300 cursor-pointer"
+                onclick={() => {
+                  renderIntroAsHTML = !renderIntroAsHTML;
+                }}>{renderIntroAsHTML ? "关闭" : "开启"}自我介绍html渲染</button
+              >
+            </div>
+            {#if renderIntroAsHTML}
+              <p
+                class="text-black mt-1 leading-relaxed text-wrap whitespace-break-spaces"
+              >
+                {@html intro}
+              </p>
+            {:else}
+              <p
+                class="text-black mt-1 leading-relaxed text-wrap whitespace-break-spaces"
+              >
+                {profile.extraInfo.selfIntroduction}
+              </p>
+            {/if}
           </div>
         {/if}
       </div>
