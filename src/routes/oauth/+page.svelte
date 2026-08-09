@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { oauthState } from "./oauthConfig";
-  import bg from "$lib/assets/registerBG.png";
+  import bg from "$lib/assets/registerBG.webp";
 
   function redirect() {
     const callbackUrl = new URL("/oauth/callback?code={code}", location.href);

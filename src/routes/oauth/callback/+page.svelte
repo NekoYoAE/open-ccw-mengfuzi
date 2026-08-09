@@ -1,7 +1,7 @@
 <script lang="ts">
   import { sso } from "$lib/api";
   import { onMount } from "svelte";
-  import bg from "$lib/assets/registerBG.png";
+  import bg from "$lib/assets/registerBG.webp";
 
   let error = $state("");
   let loading = $state(true);

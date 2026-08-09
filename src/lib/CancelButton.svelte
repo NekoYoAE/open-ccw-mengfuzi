@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { MouseEventHandler } from "svelte/elements";
-  import bg from "./assets/cancel.png";
+  import bg from "./assets/cancel.webp";
   type Props = {
     onclick: MouseEventHandler<HTMLButtonElement>;
   };

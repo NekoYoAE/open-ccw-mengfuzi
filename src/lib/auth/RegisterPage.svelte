@@ -1,8 +1,8 @@
 <script lang="ts">
   import { saveAccount } from "$lib/auth/tokenStore";
 
-  import ccwLogo from "$lib/assets/ccw-logo.png";
-  import bg from "$lib/assets/registerBG.png";
+  import ccwLogo from "$lib/assets/ccw-logo.webp";
+  import bg from "$lib/assets/registerBG.webp";
   import Error from "$lib/utils/Error.svelte";
 
   let { token = "" } = $props();
