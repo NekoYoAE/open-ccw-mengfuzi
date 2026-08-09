@@ -4,6 +4,7 @@
   import AvatarImage from "./AvatarImage.svelte";
   import DOMPurify from "dompurify";
   import { marked } from "marked";
+  import ProfileBG from "./ProfileBG.svelte";
 
   let {
     profile = $bindable(null),
@@ -54,11 +55,9 @@
   <div class="max-w-3xl mx-auto">
     <div class="bg-white shadow overflow-hidden border border-gray-100">
       {#if profile.memberArchive?.homepageCover}
-        <img
-          src={profile.memberArchive.homepageCover}
-          alt="cover"
-          class="w-full h-36 md:h-48 object-cover"
-        />
+        <div class="flex items-center w-full h-36 md:h-48 overflow-hidden">
+          <ProfileBG url={profile.memberArchive.homepageCover}></ProfileBG>
+        </div>
       {/if}
 
       <div class="px-6 pb-6">
