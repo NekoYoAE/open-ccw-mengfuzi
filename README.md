@@ -8,6 +8,7 @@
 - **OAuth SSO 登录** — 通过 CCW 官方 OAuth 授权获取 Token，无需手动复制
 - **每日签到** — 登录后一键签到领取金币
 - **Pin 加密保护** — 本地 Token 使用 AES 加密存储，每次使用需输入 Pin 解密
+- **个人主页** — 通过 `/user/[学号或OID]` 查看任意用户的公开资料与统计
 
 ## 技术栈
 
@@ -27,11 +28,12 @@
 src/
 ├── lib/
 │   ├── auth/          # 登录弹窗、注册表单、Token 存储
-│   ├── user/          # 用户状态、头像、签到弹窗
+│   ├── user/          # 用户状态、头像、签到弹窗、个人主页(Profile)
 │   ├── assets/        # 图片、图标、SVG 资源
-│   └── utils/         # AES 加解密工具
+│   └── utils/         # AES 加解密、错误提示等工具
 ├── routes/
 │   ├── +page.svelte          # 首页
+│   ├── user/[id]/            # 用户个人主页（按学号或 OID 访问）
 │   ├── register/             # 注册页
 │   ├── oauth/                # OAuth 跳转页
 │   └── oauth/callback/       # OAuth 回调页

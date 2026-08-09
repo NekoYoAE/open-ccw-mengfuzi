@@ -1,6 +1,5 @@
 <script lang="ts">
   import Logo from "./SiteLogo.svelte";
-  import Avatar from "./user/AvatarImage.svelte";
   import LoginButton from "./user/LoginButton.svelte";
   import CheckInDialog from "./user/checkin/CheckInDialog.svelte";
   import coinSvg from "$lib/assets/coin.svg";
@@ -10,6 +9,7 @@
   import { logout } from "./auth/tokenStore";
   import { goto } from "$app/navigation";
   import { communityWeb } from "$lib/api";
+  import AvatarToProfile from "./user/AvatarToProfile.svelte";
 
   let { showCheckIn = $bindable(false), checkedIn = $bindable(true) } =
     $props();
@@ -38,7 +38,7 @@
 </script>
 
 <header
-  class="bg-gray-400 w-full h-16 sticky top-0 flex items-center shrink-0 z-50"
+  class="bg-gray-500 w-full h-16 sticky top-0 flex items-center shrink-0 z-50"
 >
   <a
     href="/"
@@ -86,7 +86,7 @@
       </a>
 
       <div class="size-12" title="avatar">
-        <Avatar url={$user.avatar} />
+        <AvatarToProfile url={$user.avatar} oid={$user.oid} />
       </div>
 
       <button

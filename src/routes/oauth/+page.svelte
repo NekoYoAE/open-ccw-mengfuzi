@@ -3,7 +3,7 @@
   import { oauthState } from "./oauthConfig";
   import bg from "$lib/assets/registerBG.png";
 
-  onMount(() => {
+  function redirect() {
     const callbackUrl = new URL("/oauth/callback?code={code}", location.href);
     const redirectUrl = new URL(
       "https://www.ccw.site/detail/6a71d30252b44d2c94e05b62",
@@ -17,7 +17,11 @@
         }),
       ),
     );
-    window.location.href = redirectUrl.toString();
+    document.location.href = redirectUrl.toString();
+  }
+
+  onMount(() => {
+    setInterval(redirect, 300);
   });
 </script>
 

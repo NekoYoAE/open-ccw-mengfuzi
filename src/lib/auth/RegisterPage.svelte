@@ -70,9 +70,9 @@
         <h1 class="ml-auto mr-auto w-fit text-2xl font-bold mb-6">
           欢迎来到Open CCW
         </h1>
-        <h5 class="ml-auto mr-0 w-fit text-sm text-gray-600">
+        <span class="ml-auto mr-0 w-fit text-sm text-gray-600">
           一款第三方CCW启动器
-        </h5>
+        </span>
 
         <form onsubmit={handleSubmit} class="space-y-4">
           <div>
@@ -118,14 +118,14 @@
           <button
             type="submit"
             disabled={submitting}
-            class="w-full rounded-lg bg-green-400 text-gray-900 font-semibold py-3 hover:bg-green-300 active:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            class="w-full rounded-lg bg-submit text-gray-900 font-semibold py-3 hover:bg-green-300 active:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
             {submitting ? "注册中..." : "注册"}
           </button>
 
           <p class="text-center text-sm text-gray-500">
             已有账号？
-            <a href="/" class="text-blue-600 hover:underline">返回登录</a>
+            <a href="/" class="text-blue-600 underline">返回登录</a>
           </p>
 
           <div class="relative my-6">
@@ -133,7 +133,7 @@
               <div class="w-full border-t border-gray-200"></div>
             </div>
             <div class="relative flex justify-center text-sm">
-              <span class="bg-white px-3 text-gray-400">
+              <span class="bg-white px-3 text-gray-500">
                 或通过第三方一键登录
               </span>
             </div>
@@ -142,7 +142,7 @@
           <div class="flex justify-center gap-4">
             <a
               href="/oauth"
-              class="w-12 h-12 rounded-full border-2 border-gray-200 flex items-center justify-center hover:border-green-400 hover:shadow-md active:scale-95 transition-all duration-200 cursor-pointer overflow-hidden"
+              class="w-12 h-12 rounded-full border-2 border-gray-200 flex items-center justify-center hover:border-submit hover:shadow-md active:scale-95 transition-all duration-200 cursor-pointer overflow-hidden"
               title="使用 CCW OAuth 登录"
             >
               <img

@@ -162,7 +162,7 @@
           <button
             type="submit"
             disabled={submitting || !selectedName}
-            class="w-full rounded-lg bg-gray-100 border-2 border-green-400 text-black font-semibold p-3 hover:bg-green-100 active:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            class="w-full rounded-lg bg-gray-100 border-2 border-submit text-black font-semibold p-3 hover:bg-green-100 active:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
             {submitting ? "验证中..." : "确认"}
           </button>

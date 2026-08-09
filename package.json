@@ -31,7 +31,7 @@
     "wrangler": "^4.118.0"
   },
   "dependencies": {
-    "@ccw-api/api": "^1.0.4",
+    "@ccw-api/api": "^2.0.0",
     "@ccw-api/request": "^1.2.2",
     "crypto-js": "^4.2.0"
   }

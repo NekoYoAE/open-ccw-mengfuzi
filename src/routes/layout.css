@@ -1,2 +1,7 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 @plugin '@tailwindcss/typography';
+
+@theme {
+  --color-error: var(--color-red-500);
+  --color-submit: var(--color-green-500);
+}

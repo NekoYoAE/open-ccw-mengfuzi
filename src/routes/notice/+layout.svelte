@@ -29,6 +29,13 @@
   });
 </script>
 
+<svelte:head>
+  <title
+    >Open CCW - 消息中心{selectedId >= 0 &&
+      ` - ${noticeTypes[selectedId].name}`}</title
+  >
+</svelte:head>
+
 <PageHeader></PageHeader>
 <div class="flex justify-center w-full md:gap-24 gap-8 border-b">
   {#if selectedId >= 0}

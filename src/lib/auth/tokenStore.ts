@@ -4,7 +4,6 @@ import { decryptWithPassword, encryptWithPassword } from "$lib/utils/aes";
 import { user } from "$lib/user/userStore";
 import { communityWeb } from "$lib/api";
 import { browser } from "$app/environment";
-import { getToken } from "@ccw-api/request";
 
 const ACCOUNTS_KEY = "oc_accounts";
 const TOKEN_PREFIX = "oc_token_";
@@ -34,13 +33,26 @@ export async function updateTokenAndUser(newToken: string) {
   setToken(newToken);
   token.set(newToken);
   try {
-    const { oid, name, avatar } = await communityWeb.getStudentSelfDetail(
-      true,
-      true,
-      [],
-    );
+    const {
+      oid,
+      name,
+      bio,
+      reputationScore: { rank, score },
+      studentNumber,
+      virtualValue,
+      avatar,
+    } = await communityWeb.getStudentSelfDetail(true, true, []);
     if (oid) {
-      user.set({ oid, name, avatar, loggedIn: true });
+      user.set({
+        loggedIn: true,
+        oid,
+        name,
+        avatar,
+        bio,
+        reputationScore: { rank, score },
+        studentNumber: parseInt(studentNumber),
+        virtualValue,
+      });
     }
   } catch (e) {
     user.set({ loggedIn: false });
