@@ -52,10 +52,12 @@
 <Error {error}></Error>
 
 {#if profile}
-  <div class="max-w-3xl mx-auto">
+  <div class="max-w-full mx-auto">
     <div class="bg-white shadow overflow-hidden border border-gray-100">
       {#if profile.memberArchive?.homepageCover}
-        <div class="flex items-center w-full h-36 md:h-48 overflow-hidden">
+        <div
+          class="relative -mt-32 md:-mt-16 flex items-center w-full h-64 overflow-hidden"
+        >
           <ProfileBG url={profile.memberArchive.homepageCover}></ProfileBG>
         </div>
       {/if}
