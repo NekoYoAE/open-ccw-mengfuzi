@@ -1,10 +1,10 @@
 <script lang="ts">
   import Error from "$lib/utils/Error.svelte";
+  import { config } from "$lib/utils/purifyConfig";
   import AvatarImage from "./AvatarImage.svelte";
+  import DOMPurify from "dompurify";
+  import { marked } from "marked";
   import ProfileBG from "./ProfileBG.svelte";
-  import ProfileDataView from "./ProfileDataView.svelte";
-  import AuthRankDisplay from "./AuthRankDisplay.svelte";
-  import RenderHTML from "$lib/utils/RenderHTML.svelte";
 
   let {
     profile = $bindable(null),
@@ -27,6 +27,14 @@
     followerCount = $derived(stats?.followerCount ?? 0),
     followingCount = $derived(stats?.followingCount ?? 0);
 
+  let renderIntroAsHTML = $state(false);
+  let intro = $derived(
+    DOMPurify.sanitize(
+      String(marked.parse(profile?.extraInfo.selfIntroduction || "loading...")),
+      config,
+    ),
+  );
+
   function formatBirthday(ts: number): string {
     if (!ts) return "-";
     const d = new Date(ts);
@@ -45,15 +53,15 @@
 
 {#if profile}
   <div class="max-w-full mx-auto">
-    <div class="bg-white shadow overflow-hidden border border-gray-100">
-      {#if profile.memberArchive?.homepageCover}
-        <div
-          class="relative -mt-32 md:-mt-16 flex items-center w-full h-64 overflow-hidden"
-        >
-          <ProfileBG url={profile.memberArchive.homepageCover}></ProfileBG>
-        </div>
-      {/if}
+    {#if profile.memberArchive?.homepageCover}
+      <div
+        class="relative -mt-16 pt-16 flex items-center w-full h-72 overflow-hidden"
+      >
+        <ProfileBG url={profile.memberArchive.homepageCover}></ProfileBG>
+      </div>
+    {/if}
 
+    <div class="bg-white shadow overflow-hidden border border-gray-100">
       <div class="px-6 pb-6">
         <!-- 头像 -->
         <div class="flex flex-row gap-4 relative flex-nowrap">
@@ -72,9 +80,17 @@
           </div>
 
           <div class="ml-2 mt-0 flex flex-col">
-            <h1 class="text-2xl font-bold text-gray-900 items-center gap-2 flex">
+            <h1 class="text-2xl font-bold text-gray-900 items-center gap-2">
               {profile.name}
-              <AuthRankDisplay rank={profile.identityAuthRank}></AuthRankDisplay>
+              {#if profile.identityAuthRank === "REAL_NAME"}
+                <span title="已实名认证" class="size-5 text-indigo-500 shrink-0"
+                  ><svg viewBox="0 0 24 24" fill="currentColor"
+                    ><path
+                      d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"
+                    /></svg
+                  ></span
+                >
+              {/if}
             </h1>
             <p class="text-xs text-gray-500 mt-1">
               学号：{profile.studentNumber}
@@ -96,42 +112,52 @@
         <div
           class="mt-6 grid grid-cols-4 gap-3 border-t border-gray-100 pt-5 text-center"
         >
-        {const {statistics} = profile}
-          <ProfileDataView
-            name="信誉分"
-            data={profile.reputationScore.score}
-          />
-          <ProfileDataView
-            name="作品数"
-            data={statistics.homeworkCount}
-          />
-          <ProfileDataView name="总获赞" data={likeCount} />
-          <ProfileDataView
-            name="作品获赞"
-            data={statistics.likeHomeworkCount}
-          />
+          <div>
+            <div class="text-2xl font-bold text-indigo-600">
+              {profile.reputationScore.score}
+            </div>
+            <div class="text-xs text-gray-500 mt-1">信誉分</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-gray-800">
+              {profile.statistics.homeworkCount}
+            </div>
+            <div class="text-xs text-gray-500 mt-1">作品</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-gray-800">{likeCount}</div>
+            <div class="text-xs text-gray-500 mt-1">总点赞</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-gray-800">
+              {profile.statistics.likeHomeworkCount}
+            </div>
+            <div class="text-xs text-gray-500 mt-1">作品获赞</div>
+          </div>
         </div>
 
         <!-- 社交统计 -->
         <div
           class="mt-3 grid grid-cols-4 gap-3 border-t border-gray-100 pt-4 text-center"
         >
-          <ProfileDataView
-            name="被收藏"
-            data={favoriteCount}
-          />
-          <ProfileDataView
-            name="评论数"
-            data={profile.commentCount}
-          />
-          <ProfileDataView
-            name="粉丝数"
-            data={followerCount}
-          />
-          <ProfileDataView
-            name="关注数"
-            data={followingCount}
-          />
+          <div>
+            <div class="text-2xl font-bold text-gray-800">{favoriteCount}</div>
+            <div class="text-xs text-gray-500 mt-1">被收藏</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-gray-800">
+              {profile.commentCount}
+            </div>
+            <div class="text-xs text-gray-500 mt-1">评论</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-gray-800">{followerCount}</div>
+            <div class="text-xs text-gray-500 mt-1">粉丝</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-gray-800">{followingCount}</div>
+            <div class="text-xs text-gray-500 mt-1">关注</div>
+          </div>
         </div>
       </div>
     </div>
@@ -198,7 +224,30 @@
           </div>
         {/if}
         {#if profile.extraInfo.selfIntroduction}
-          <RenderHTML text={profile.extraInfo.selfIntroduction}></RenderHTML>
+          <div>
+            <div class="flex w-full">
+              <span class="text-gray-400">自我介绍</span>
+              <button
+                class="ml-auto mr-0 bg-white text-red-500 rounded-md border border-red-500 p-1 hover:bg-red-300 cursor-pointer"
+                onclick={() => {
+                  renderIntroAsHTML = !renderIntroAsHTML;
+                }}>{renderIntroAsHTML ? "关闭" : "开启"}自我介绍html渲染</button
+              >
+            </div>
+            {#if renderIntroAsHTML}
+              <p
+                class="text-black mt-1 leading-relaxed text-wrap whitespace-break-spaces"
+              >
+                {@html intro}
+              </p>
+            {:else}
+              <p
+                class="text-black mt-1 leading-relaxed text-wrap whitespace-break-spaces"
+              >
+                {profile.extraInfo.selfIntroduction}
+              </p>
+            {/if}
+          </div>
         {/if}
       </div>
     </div>
