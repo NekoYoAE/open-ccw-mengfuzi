@@ -37,8 +37,9 @@
   });
 </script>
 
+<!--修改导航栏👇-->
 <header
-  class="bg-gray-500 w-full h-16 sticky top-0 flex items-center shrink-0 z-50"
+  class="bg-black/65 w-full h-16 sticky top-0 flex items-center shrink-0 z-50 backdrop-blur-[5px]"
 >
   <a
     href="/"
