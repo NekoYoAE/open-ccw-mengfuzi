@@ -19,9 +19,10 @@ export const config = {
     "blockquote",
     "pre",
     "code",
+    "font",
   ],
   // 2. 属性白名单：仅允许链接必需的 href，不放行 style 和 class
-  ALLOWED_ATTR: ["href", "target", "title"],
+  ALLOWED_ATTR: ["href", "target", "title", "color"],
   // 3. 禁止的标签（双重保险）：禁止 script、style、iframe 及 SVG 相关标签
   FORBID_TAGS: [
     "script",

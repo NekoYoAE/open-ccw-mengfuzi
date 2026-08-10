@@ -16,6 +16,23 @@
     followingCount: number;
   } | null>(null);
 
+  $effect(() => {
+    if (!profile) {
+      return;
+    }
+    if (!params.id) {
+      return;
+    }
+    if (
+      profile.studentOid !== params.id &&
+      profile.studentNumber !== params.id
+    ) {
+      profile = null;
+      stats = null;
+      load();
+    }
+  });
+
   async function load() {
     if (!params.id) {
       error = "config error";
@@ -53,16 +70,31 @@
 
 <svelte:head>
   <title>Open CCW - 用户主页 - {profile?.name ?? params.id}</title>
-  <meta name="description" content={profile?.bio ?? "查看 CCW 用户的个人主页"} />
+  <meta
+    name="description"
+    content={profile?.bio ?? "查看 CCW 用户的个人主页"}
+  />
   <meta name="og:title" content="Open CCW - {profile?.name ?? '用户主页'}" />
-  <meta name="og:description" content={profile?.bio ?? "查看 CCW 用户的个人主页"} />
+  <meta
+    name="og:description"
+    content={profile?.bio ?? "查看 CCW 用户的个人主页"}
+  />
   {#if profile?.avatar}
     <meta name="og:image" content={profile.avatar} />
   {/if}
-  <meta name="og:url" content={`https://ccw.kivotos.qzz.io/user/${params.id}`} />
+  <meta
+    name="og:url"
+    content={`https://ccw.kivotos.qzz.io/user/${params.id}`}
+  />
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Open CCW - {profile?.name ?? '用户主页'}" />
-  <meta name="twitter:description" content={profile?.bio ?? "查看 CCW 用户的个人主页"} />
+  <meta
+    name="twitter:title"
+    content="Open CCW - {profile?.name ?? '用户主页'}"
+  />
+  <meta
+    name="twitter:description"
+    content={profile?.bio ?? "查看 CCW 用户的个人主页"}
+  />
   {#if profile?.avatar}
     <meta name="twitter:image" content={profile.avatar} />
   {/if}
