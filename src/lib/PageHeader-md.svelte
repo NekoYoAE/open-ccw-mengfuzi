@@ -46,9 +46,9 @@
     class="absolute flex h-16 items-center justify-center"
     title="homepage"
   >
-    <div class="size-12 ml-2 shrink-0"><Logo /></div>
+    <div class="size-10 ml-3 shrink-0"><Logo /></div>
     <h1
-      class="ml-2 overflow-hidden h-14 text-4xl text-white font-bold content-center font-serif whitespace-nowrap"
+      class="ml-3 overflow-hidden h-14 text-3xl text-white font-bold content-center font-serif whitespace-nowrap"
     >
       Open CCW
     </h1>
